@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tovoro (TVR) Wallet & Marketplace</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.11.1/dist/index.umd.min.js"></script>
+    <style>
+        .gold-glow { shadow: 0 0 15px rgba(234, 179, 8, 0.3); }
+        body { background-color: #0b0c10; color: #c5c6c7; }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <nav class="border-b border-yellow-600/20 bg-[#1f2833]/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl font-black tracking-widest text-yellow-500">TOVORO</span>
+                <span class="bg-yellow-500/10 text-yellow-500 text-xs px-2 py-0.5 rounded-full font-mono">10K Supply</span>
+            </div>
+            <button id="connectBtn" class="bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-black font-bold px-6 py-2.5 rounded-xl transition duration-300 transform hover:scale-105 shadow-lg shadow-yellow-500/20">
+                Connect Wallet
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="bg-[#1f2833] border border-yellow-600/30 rounded-2xl p-6 flex flex-col justify-between gold-glow">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Your TVR Balance</h3>
+                    <p id="tvrBalance" class="text-4xl font-black text-yellow-500 mt-2 font-mono">0.0000</p>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-700 flex justify-between text-xs font-mono text-gray-400">
+                    <span>Symbol: TVR</span>
+                    <span id="walletAddress">Not Connected</span>
+                </div>
+            </div>
+
+            <div class="bg-[#1f2833] border border-yellow-600/30 rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Next 5-Month Token Release</h3>
+                    <div class="grid grid-cols-3 gap-2 text-center mt-3">
+                        <div class="bg-black/40 p-2 rounded-lg"><span id="days" class="text-xl font-bold text-white font-mono">150</span><div class="text-[10px] text-gray-400">Days</div></div>
+                        <div class="bg-black/40 p-2 rounded-lg"><span id="hours" class="text-xl font-bold text-white font-mono">00</span><div class="text-[10px] text-gray-400">Hours</div></div>
+                        <div class="bg-black/40 p-2 rounded-lg"><span id="mins" class="text-xl font-bold text-white font-mono">00</span><div class="text-[10px] text-gray-400">Mins</div></div>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-gray-700 text-center">
+                    <span class="text-xs text-yellow-500/80 font-medium">✨ Scarcity Strategy Enabled</span>
+                </div>
+            </div>
+
+            <div class="bg-[#1f2833] border border-gray-800 rounded-2xl p-6">
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Quick Send TVR</h3>
+                <div class="space-y-2">
+                    <input type="text" id="toAddress" placeholder="Recipient Address (0x...)" class="w-full bg-black/50 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-yellow-500 text-white font-mono">
+                    <input type="number" id="sendAmount" step="any" placeholder="Amount (TVR)" class="w-full bg-black/50 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-yellow-500 text-white font-mono">
+                    <button id="sendBtn" class="w-full bg-yellow-500/10 hover:bg-yellow-500 text-yellow-500 hover:text-black font-bold py-2 rounded-lg transition text-sm">Send TVR</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-[#1f2833]/40 border border-gray-800 rounded-3xl p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Tovoro Premium Marketplace</h2>
+                    <p class="text-sm text-gray-400">ဝယ်သမျှ၊ ရောင်းသမျှ အရာအားလုံးကို TVR တိုကင်တစ်ခုတည်းဖြင့်သာ အရောင်းအဝယ်ပြုလုပ်ရမည့်စနစ်</p>
+                </div>
+                <span class="bg-amber-500/10 text-amber-500 border border-amber-500/30 px-3 py-1 rounded-xl text-xs font-semibold self-start sm:self-center">TVR Exclusive Zone</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-[#1f2833] border border-gray-800 rounded-2xl p-5 space-y-4 hover:border-yellow-500/40 transition">
+                    <div class="h-40 bg-gradient-to-br from-yellow-600/20 to-black rounded-xl flex items-center justify-center border border-gray-800">
+                        <span class="text-4xl">🎮</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white">Tovoro Cyber Sword (Web3 Game NFT)</h4>
+                        <p class="text-xs text-gray-400 mt-1">ဂိမ်းထဲတွင် အစွမ်းအထက်ဆုံး အထူးသီးသန့် ဓားလက်နက်</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-2">
+                        <span class="text-yellow-500 font-bold font-mono">0.05 TVR</span>
+                        <button onclick="buyItem('Cyber Sword', 0.05)" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs px-4 py-2 rounded-lg transition">Buy Now</button>
+                    </div>
+                </div>
+
+                <div class="bg-[#1f2833] border border-gray-800 rounded-2xl p-5 space-y-4 hover:border-yellow-500/40 transition">
+                    <div class="h-40 bg-gradient-to-br from-amber-600/20 to-black rounded-xl flex items-center justify-center border border-gray-800">
+                        <span class="text-4xl">🤖</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white">Tovoro Trading AI Agent (1-Month Access)</h4>
+                        <p class="text-xs text-gray-400 mt-1">အလိုအလျောက် အမြတ်ရှာပေးမည့် AI Bot ကို သုံးစွဲခွင့်လိုင်စင်</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-2">
+                        <span class="text-yellow-500 font-bold font-mono">0.12 TVR</span>
+                        <button onclick="buyItem('AI Agent License', 0.12)" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs px-4 py-2 rounded-lg transition">Buy Now</button>
+                    </div>
+                </div>
+
+                <div class="bg-[#1f2833] border border-gray-800 rounded-2xl p-5 space-y-4 hover:border-yellow-500/40 transition">
+                    <div class="h-40 bg-gradient-to-br from-orange-600/20 to-black rounded-xl flex items-center justify-center border border-gray-800">
+                        <span class="text-4xl">👑</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white">Tovoro Elite Club VIP Pass</h4>
+                        <p class="text-xs text-gray-400 mt-1">၁ သောင်းသော Holders များကြားမှ အဆင့်မြင့်အဖွဲ့ဝင်ဖြစ်ခွင့်ကတ်</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-2">
+                        <span class="text-yellow-500 font-bold font-mono">0.50 TVR</span>
+                        <button onclick="buyItem('VIP Pass', 0.50)" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs px-4 py-2 rounded-lg transition">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ⚠️ သင့်ရဲ့ Contract တင်ပြီးရင် ရလာမယ့် Address ကို ဒီနေရာမှာ အစားထိုးပါ
+        const tokenAddress = "0x0000000000000000000000000000000000000000"; 
+        
+        // ERC-20 Basic ABI for balanceOf and transfer
+        const tokenAbi = [
+            "function balanceOf(address account) public view returns (uint256)",
+            "function transfer(address to, uint256 value) public returns (bool)"
+        ];
+
+        let provider, signer, tokenContract, userAddress;
+
+        const connectBtn = document.getElementById('connectBtn');
+        const tvrBalance = document.getElementById('tvrBalance');
+        const walletAddress = document.getElementById('walletAddress');
+
+        // Connect Wallet Function
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    // Browser Extention (MetaMask) နှင့် ချိတ်ဆက်ခြင်း
+                    provider = new ethers.BrowserProvider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    signer = await provider.getSigner();
+                    userAddress = await signer.getAddress();
+                    
+                    // Contract Instance ဆောက်ခြင်း
+                    tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
+
+                    // UI ပြင်ဆင်ခြင်း
+                    walletAddress.innerText = `${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
+                    connectBtn.innerText = "Wallet Connected";
+                    connectBtn.classList.replace('from-yellow-500', 'from-green-600');
+                    
+                    // Balance ကို စစ်ဆေးခြင်း
+                    updateBalance();
+                } catch (error) {
+                    console.error("User denied account access", error);
+                    alert("Wallet ချိတ်ဆက်မှု တားဆီးခံရပါသည်။");
+                }
+            } else {
+                alert("MetaMask သို့မဟုတ် Trust Wallet ထည့်သွင်းပေးရန် လိုအပ်ပါသည်။");
+            }
+        }
+
+        // Update TVR Balance
+        async function updateBalance() {
+            if (!tokenContract || tokenAddress === "0xB5b4038b315faF1265f9F2cB68e824d45f14323C") {
+                tvrBalance.innerText = "10,000.00"; // Test အနေဖြင့် ကနဦး ပြထားခြင်း
+                return;
+            }
+            try {
+                const balance = await tokenContract.balanceOf(userAddress);
+                // 18 decimals ဖြစ်သောကြောင့် formatEther သုံး၍ ရှင်းထုတ်သည်
+                tvrBalance.innerText = parseFloat(ethers.formatEther(balance)).toFixed(4);
+            } catch (err) {
+                console.error("Error fetching balance:", err);
+            }
+        }
+
+        // Quick Send Transfer Function
+        document.getElementById('sendBtn').addEventListener('click', async () => {
+            const to = document.getElementById('toAddress').value;
+            const amount = document.getElementById('sendAmount').value;
+
+            if (!tokenContract) return alert("Wallet ကို အရင် Connect လုပ်ပါဗျာ။");
+            if (!to || !amount) return alert("လွှဲမည့်လိပ်စာနှင့် ပမာဏကို အမှန်ကန်ဖြည့်ပါ။");
+
+            try {
+                const parsedAmount = ethers.parseEther(amount);
+                const tx = await tokenContract.transfer(to, parsedAmount);
+                alert("ငွေလွှဲမှု လုပ်ဆောင်နေပါပြီ... ခဏစောင့်ပါ။");
+                await tx.wait();
+                alert("TVR လွှဲပြောင်းမှု အောင်မြင်ပါပြီ ခင်ဗျာ။");
+                updateBalance();
+            } catch (err) {
+                console.error(err);
+                alert("ငွေလွှဲမှု မအောင်မြင်ပါ (ကုဒ် သို့မဟုတ် Balance စစ်ဆေးပါ)။");
+            }
+        });
+
+        // Marketplace Buy Function (Direct Contract Transfer)
+        async function buyItem(itemName, price) {
+            if (!tokenContract) return alert("ဝယ်ယူရန်အတွက် Wallet ကို အရင်ဆုံး ချိတ်ဆက်ပေးပါဗျာ။");
+            
+            // ⚠️ ဤနေရာတွင် ပစ္စည်းရောင်းသူ (Creator Wallet) လိပ်စာ ထည့်ပါ
+            const creatorAddress = "0xCE100BCD90Bd7c3a7e42D1ba97e8F58Ad957918E"; 
+
+            try {
+                const parsedPrice = ethers.parseEther(price.toString());
+                const tx = await tokenContract.transfer(creatorAddress, parsedPrice);
+                alert(`${itemName} ကို ဝယ်ယူရန် TVR ပေးချေနေပါပြီ...`);
+                await tx.wait();
+                alert(`${itemName} ကို TVR ${price} ဖြင့် အောင်မြင်စွာ ဝယ်ယူပြီးပါပြီ။ 🚀`);
+                updateBalance();
+            } catch (err) {
+                console.error(err);
+                alert("ဝယ်ယူမှု မအောင်မြင်ပါ။ TVR မလုံလောက်ခြင်း ဖြစ်နိုင်ပါသည်။");
+            }
+        }
+
+        // 5-Month Countdown Timer Logic (ဥပမာ ရက်ပေါင်း ၁၅၀ အား စက္ကန့်အလိုက် လျှော့ချပြခြင်း)
+        let totalSeconds = 150 * 24 * 60 * 60; // 150 Days in seconds
+        setInterval(() => {
+            if (totalSeconds > 0) {
+                totalSeconds--;
+                const d = Math.floor(totalSeconds / (24 * 60 * 60));
+                const h = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+                const m = Math.floor((totalSeconds % (60 * 60)) / 60);
+                
+                document.getElementById('days').innerText = d;
+                document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+                document.getElementById('mins').innerText = m.toString().padStart(2, '0');
+            }
+        }, 1000);
+
+        // Bind Button Event
+        connectBtn.addEventListener('click', connectWallet);
+    </script>
+</body>
+</html>
