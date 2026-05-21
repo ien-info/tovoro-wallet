@@ -120,8 +120,8 @@
     </main>
 
     <script>
-        // ⚠️ သင့်ရဲ့ Contract တင်ပြီးရင် ရလာမယ့် Address ကို ဒီနေရာမှာ အစားထိုးပါ
-        const tokenAddress = "0x0000000000000000000000000000000000000000"; 
+        // ⚠️ ပြင်ဆင်ပြီးသား Tovoro (TVR) Token Contract Address
+        const tokenAddress = "0xB5b4038b315faF1265f9F2cB68e824d45f14323C"; 
         
         // ERC-20 Basic ABI for balanceOf and transfer
         const tokenAbi = [
@@ -204,7 +204,7 @@
         async function buyItem(itemName, price) {
             if (!tokenContract) return alert("ဝယ်ယူရန်အတွက် Wallet ကို အရင်ဆုံး ချိတ်ဆက်ပေးပါဗျာ။");
             
-            // ⚠️ ဤနေရာတွင် ပစ္စည်းရောင်းသူ (Creator Wallet) လိပ်စာ ထည့်ပါ
+            // ⚠️ ပြင်ဆင်ပြီးသား ပစ္စည်းရောင်းသူ (Creator Wallet) လိပ်စာ
             const creatorAddress = "0xCE100BCD90Bd7c3a7e42D1ba97e8F58Ad957918E"; 
 
             try {
