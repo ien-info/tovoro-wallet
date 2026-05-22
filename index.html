@@ -118,6 +118,48 @@
             </div>
         </div>
     </main>
+    <div class="flex flex-col items-center justify-center my-6 p-4 border border-yellow-500/20 bg-slate-900/50 rounded-xl max-w-sm mx-auto">
+    <p class="text-xs text-gray-400 mb-2 font-mono text-center">Ready for Mainnet? Connect your wallet to Base Network</p>
+    <button onclick="switch_To_Base_Network()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg flex items-center gap-2 transition duration-200">
+        <span class="w-3 h-3 bg-blue-400 rounded-full animate-ping"></span>
+        Connect Base Mainnet
+    </button>
+</div>
+
+<script>
+async function switch_To_Base_Network() {
+    if (window.ethereum) {
+        try {
+            // MetaMask ကို Base Mainnet သို့ ပြောင်းခိုင်းခြင်း
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x2105' }], // 0x2105 က Base Mainnet ရဲ့ Hex Id ပါ
+            });
+            alert("Base Mainnet ချိတ်ဆက်မှု အောင်မြင်ပါပြီ သားကြီးသွင်! 🚀");
+        } catch (switchError) {
+            // အကယ်၍ MetaMask ထဲမှာ Base Network မရှိသေးရင် အလိုအလျောက် အသစ်ထည့်ပေးခြင်း
+            if (switchError.code === 4902) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x2105',
+                            chainName: 'Base Mainnet',
+                            nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+                            rpcUrls: ['https://mainnet.base.org'],
+                            blockExplorerUrls: ['https://basescan.org']
+                        }],
+                    });
+                } catch (addError) {
+                    console.error("Network ထည့်ရတာ အဆင်မပြေပါဘူး။");
+                }
+            }
+        }
+    } else {
+        alert("MetaMask Wallet တပ်ဆင်ထားဖို့ လိုအပ်ပါတယ်ဗျာ။");
+    }
+}
+</script>
 
     <script>
         // ⚠️ ပြင်ဆင်ပြီးသား Tovoro (TVR) Token Contract Address
